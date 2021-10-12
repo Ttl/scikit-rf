@@ -196,6 +196,22 @@ class Media(ABC):
         """
         return None
 
+    @property
+    def er_eff(self) -> npy.ndarray:
+        """
+        Effective complex relative permittivity.
+
+        Defined in terms of the propagation constant:
+
+        .. math::
+            \\gamma = \\alpha + j \\beta = \\frac{2\\pi f}{c} \\sqrt{\\epsilon_{r,eff}}
+
+        Returns
+        -------
+        er_eff : :class:`numpy.ndarray`
+            effective complex relative permittivity for this media
+        """
+        return -(self.gamma/(2*npy.pi*self.frequency.f/c))**2
 
     @property
     def alpha(self) -> npy.ndarray:

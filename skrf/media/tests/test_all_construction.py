@@ -5,6 +5,7 @@ of all general circuit components
 '''
 import unittest
 import skrf as rf
+import numpy as npy
 from scipy.constants import *
 
 
@@ -12,6 +13,18 @@ class MediaTestCase():
     """Base class, contains tests for all media."""
     def test_gamma(self):
         self.media.gamma
+
+    def test_er_eff(self):
+        self.media.er_eff
+
+    def test_gamma_er_eff_relation(self):
+        gamma = self.media.gamma
+        # Square root gives the solution with positive real part which is the
+        # one we want.
+        g_er_eff = (1j*2*pi*self.frequency.f/c)*npy.sqrt(self.media.er_eff)
+        # Avoid subtraction because the numbers are very big.
+        # Exact test doesn't work because of precision issues.
+        self.assertTrue(all(npy.abs(1 - (gamma / g_er_eff)) < 1e-9))
 
     def test_Z0_value(self):
         self.media.Z0
