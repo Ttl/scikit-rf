@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import numpy as np
-import pytest
 
 import skrf as rf
 
@@ -46,30 +45,25 @@ def test_ex_4():
      )
     assert ts == ref
 
-s_mag = np.array(
-        [[[0.6 , 0.4 , 0.42, 0.53],
-        [0.4 , 0.6 , 0.53, 0.42],
-        [0.42, 0.53, 0.6 , 0.4 ],
-        [0.53, 0.42, 0.4 , 0.6 ]]])
+def test_ts_example_5_6():
+    s_mag = np.array(
+            [[[0.6 , 0.4 , 0.42, 0.53],
+            [0.4 , 0.6 , 0.53, 0.42],
+            [0.42, 0.53, 0.6 , 0.4 ],
+            [0.53, 0.42, 0.4 , 0.6 ]]])
 
-s_deg = np.array(
-    [[[161.24, -42.2 , -66.58, -79.34],
-    [-42.2 , 161.2 , -79.34, -66.58],
-    [-66.58, -79.34, 161.24, -42.2 ],
-    [-79.34, -66.58, -42.2 , 161.24]]])
+    s_deg = np.array(
+        [[[161.24, -42.2 , -66.58, -79.34],
+        [-42.2 , 161.2 , -79.34, -66.58],
+        [-66.58, -79.34, 161.24, -42.2 ],
+        [-79.34, -66.58, -42.2 , 161.24]]])
 
-s = s_mag * np.exp(1j*s_deg * np.pi / 180)
-ex_5_6 = rf.Network(s=np.tile(s, [2, 1, 1]), z0=[50, 75, 0.01, 0.01], f=[5e9, 6e9], f_unit="Hz")
+    s = s_mag * np.exp(1j*s_deg * np.pi / 180)
+    ex_5_6 = rf.Network(s=np.tile(s, [2, 1, 1]), z0=[50, 75, 0.01, 0.01], f=[5e9, 6e9], f_unit="Hz")
 
-@pytest.mark.parametrize("fname",
-    [
-        test_data / "ex_5.ts",
-        test_data / "ex_6.ts",
-    ]
-)
-def test_ts_example_5_6(fname):
-    ts = rf.Network(fname)
-    assert ex_5_6 == ts
+    for fname in [test_data / "ex_5.ts", test_data / "ex_6.ts"]:
+        ts = rf.Network(fname)
+        assert ex_5_6 == ts
 
 def test_ts_example_7():
     ts = rf.Network(test_data / "ex_7.ts")
